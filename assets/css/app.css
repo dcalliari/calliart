@@ -75,7 +75,7 @@ body { font-family: 'Cormorant Garamond', Georgia, serif; color: #ece4d6; -webki
 
 /* ── mobile ───────────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
-  #ca-dots     { display: none; }
+  #ca-dots     { display: none !important; }
   .ca-arrow    { display: none; }
   #ca-nav-hint { display: none; }
   #ca-caption  { max-width: calc(100% - 150px) !important; }
