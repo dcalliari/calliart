@@ -7,7 +7,17 @@ defmodule CalliartWeb.HomeLive do
     %{title: "Noir Atelier", meta: "CAMPAIGN · 2024", frames: [1.5, 0.7, 1.3, 0.7, 1.2, 0.8]},
     %{title: "Wildflower", meta: "EDITORIAL · 2024", frames: [0.7, 1.4, 0.7, 1.2]},
     %{title: "After Hours", meta: "PORTRAIT · 2025", frames: [1.3, 0.7, 1.4, 0.7, 1.2]},
-    %{title: "Concrete Muse", meta: "CAMPAIGN · 2025", frames: [0.8, 1.3, 0.7, 1.4]}
+    %{title: "Concrete Muse", meta: "CAMPAIGN · 2025", frames: [0.8, 1.3, 0.7, 1.4]},
+    %{title: "The Garden", meta: "EDITORIAL · 2025", frames: [1.2, 0.8, 1.1]},
+    %{title: "A New Beginning", meta: "CAMPAIGN · 2024", frames: [0.6, 1.5, 0.9, 1.1, 1.4]},
+    %{title: "The Journey Begins", meta: "EDITORIAL · 2025", frames: [1.1, 0.7, 1.2, 0.8]},
+    %{title: "Urban Solitude", meta: "PORTRAIT · 2023", frames: [1.0, 1.1, 0.9]},
+    %{title: "A Touch of Blue", meta: "BEAUTY · 2022", frames: [1.3, 0.7, 1.5, 0.8, 1.2, 0.6]},
+    %{title: "Fragments", meta: "EDITORIAL · 2024", frames: [0.9, 1.2, 1.0, 0.8, 1.2]},
+    %{title: "Reverie", meta: "PORTRAIT · 2025", frames: [1.4, 1.1]},
+    %{title: "Serene Morning", meta: "BEAUTY · 2025", frames: [1.3, 0.7]},
+    %{title: "Edge of Dusk", meta: "CAMPAIGN · 2023", frames: [1.2, 1.0, 0.7, 1.1]},
+    %{title: "Chromatic Dreams", meta: "EDITORIAL · 2025", frames: [0.8, 1.5, 0.9, 1.1, 1.0, 0.7, 1.2]}
   ]
 
   @tones [
