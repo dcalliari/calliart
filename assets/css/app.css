@@ -72,3 +72,12 @@ body { font-family: 'Cormorant Garamond', Georgia, serif; color: #ece4d6; -webki
 /* ── overlay animations ───────────────────────────────────────────────────── */
 @keyframes caFade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes caRise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── mobile ───────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  #ca-dots     { display: none; }
+  .ca-arrow    { display: none; }
+  #ca-nav-hint { display: none; }
+  #ca-caption  { max-width: calc(100% - 150px) !important; }
+  #ca-title    { font-size: 26px !important; }
+}

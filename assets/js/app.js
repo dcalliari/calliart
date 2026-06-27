@@ -12,6 +12,7 @@ const Hooks = {};
 Hooks.CalliartHook = {
   mounted() {
     this._ed = parseInt(this.el.dataset.ed || "0");
+    this._edCount = parseInt(this.el.dataset.edCount || "1");
     this._frame = 0;
     this._frameCount = parseInt(this.el.dataset.frameCount || "1");
     this._activeWrap = null;
@@ -27,12 +28,24 @@ Hooks.CalliartHook = {
     this._raf = null;
     this._scrolling = false;
 
+    this._touchStartX = 0;
+    this._touchStartY = 0;
+    this._touchDir = null;
+    this._trackBaseX = 0;
+    this._onTouchStart = (e) => this._handleTouchStart(e);
+    this._onTouchMove  = (e) => this._handleTouchMove(e);
+    this._onTouchEnd   = (e) => this._handleTouchEnd(e);
+
     window.addEventListener("keydown", this._onKeydown);
+    this.el.addEventListener("touchstart", this._onTouchStart, { passive: true });
+    this.el.addEventListener("touchmove",  this._onTouchMove,  { passive: false });
+    this.el.addEventListener("touchend",   this._onTouchEnd,   { passive: true });
     this._setupWrap(this._ed);
   },
 
   updated() {
     const newEd = parseInt(this.el.dataset.ed || "0");
+    this._edCount = parseInt(this.el.dataset.edCount || "1");
     this._frameCount = parseInt(this.el.dataset.frameCount || "1");
     if (newEd !== this._ed) {
       this._ed = newEd;
@@ -43,6 +56,9 @@ Hooks.CalliartHook = {
 
   destroyed() {
     window.removeEventListener("keydown", this._onKeydown);
+    this.el.removeEventListener("touchstart", this._onTouchStart);
+    this.el.removeEventListener("touchmove",  this._onTouchMove);
+    this.el.removeEventListener("touchend",   this._onTouchEnd);
     if (this._raf) cancelAnimationFrame(this._raf);
     if (this._activeWrap) {
       this._activeWrap.removeEventListener("scroll", this._onScroll);
@@ -103,6 +119,74 @@ Hooks.CalliartHook = {
     if (e.key === "Escape") { this.pushEvent("close_overlays", {}); return; }
     if (e.key === "ArrowLeft")  { e.preventDefault(); this.pushEvent("prev_ed", {}); }
     if (e.key === "ArrowRight") { e.preventDefault(); this.pushEvent("next_ed", {}); }
+  },
+
+  _handleTouchStart(e) {
+    const track = document.getElementById("ca-track");
+    if (track) {
+      const m = new DOMMatrix(window.getComputedStyle(track).transform);
+      this._trackBaseX = m.m41;
+      track.style.transition = "none";
+      track.style.transform = `translateX(${this._trackBaseX}px)`;
+    }
+    const t = e.touches[0];
+    this._touchStartX = t.clientX;
+    this._touchStartY = t.clientY;
+    this._touchDir = null;
+  },
+
+  _handleTouchMove(e) {
+    const t = e.touches[0];
+    const dx = t.clientX - this._touchStartX;
+    const dy = t.clientY - this._touchStartY;
+
+    if (!this._touchDir) {
+      if (Math.abs(dx) > 8 || Math.abs(dy) > 8)
+        this._touchDir = Math.abs(dx) > Math.abs(dy) ? "h" : "v";
+      return;
+    }
+    if (this._touchDir !== "h") return;
+    e.preventDefault();
+
+    const track = document.getElementById("ca-track");
+    if (!track) return;
+
+    let newX = this._trackBaseX + dx;
+    if (this._ed === 0 && dx > 0)                         newX = dx * 0.2;
+    if (this._ed === this._edCount - 1 && dx < 0)         newX = this._trackBaseX + dx * 0.2;
+    track.style.transform = `translateX(${newX}px)`;
+  },
+
+  _handleTouchEnd(e) {
+    const track = document.getElementById("ca-track");
+    const snap = "transform .95s cubic-bezier(.76,0,.24,1)";
+
+    if (this._touchDir !== "h") {
+      if (track) track.style.transition = snap;
+      return;
+    }
+
+    const dx = e.changedTouches[0].clientX - this._touchStartX;
+    const threshold = 60;
+
+    if (dx < -threshold && this._ed < this._edCount - 1) {
+      if (track) {
+        track.style.transition = snap;
+        track.style.transform = `translateX(${-(this._ed + 1) * window.innerWidth}px)`;
+      }
+      this.pushEvent("next_ed", {});
+    } else if (dx > threshold && this._ed > 0) {
+      if (track) {
+        track.style.transition = snap;
+        track.style.transform = `translateX(${-(this._ed - 1) * window.innerWidth}px)`;
+      }
+      this.pushEvent("prev_ed", {});
+    } else {
+      if (track) {
+        track.style.transition = snap;
+        track.style.transform = `translateX(${this._trackBaseX}px)`;
+      }
+    }
   },
 
   _handleWheel(e) {
