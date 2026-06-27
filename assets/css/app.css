@@ -1,0 +1,74 @@
+/* ── reset & base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #14110d; }
+body { font-family: 'Cormorant Garamond', Georgia, serif; color: #ece4d6; -webkit-font-smoothing: antialiased; }
+::selection { background: #ece4d6; color: #14110d; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* ── scrollbar hide ───────────────────────────────────────────────────────── */
+.ca-scroll::-webkit-scrollbar { display: none; }
+.ca-scroll { scrollbar-width: none; }
+
+/* ── frame dots ───────────────────────────────────────────────────────────── */
+.ca-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background .35s ease, transform .35s ease;
+  background: rgba(236, 228, 214, .28);
+}
+.ca-dot--active {
+  background: rgba(236, 228, 214, .95);
+  transform: scale(1.25);
+}
+
+/* ── navigation arrows ────────────────────────────────────────────────────── */
+.ca-arrow {
+  position: absolute; top: 0; bottom: 0; width: 13%;
+  background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; z-index: 10;
+  transition: color .8s ease;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 38px; line-height: 1;
+  color: rgba(236, 228, 214, 0);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .6);
+}
+.ca-arrow::before {
+  content: '';
+  position: absolute; inset: 0;
+  opacity: 0;
+  transition: opacity .8s ease;
+}
+.ca-arrow--left  { left: 0; padding-left: 30px; justify-content: flex-start; }
+.ca-arrow--right { right: 0; padding-right: 30px; justify-content: flex-end; }
+.ca-arrow--left::before  { background: linear-gradient(to right, rgba(8,6,4,.22), rgba(8,6,4,0)); }
+.ca-arrow--right::before { background: linear-gradient(to left, rgba(8,6,4,.22), rgba(8,6,4,0)); }
+.ca-arrow:hover::before { opacity: 1; }
+.ca-arrow:hover { color: rgba(236,228,214,.78); }
+
+/* ── top bar buttons ──────────────────────────────────────────────────────── */
+.ca-logo {
+  pointer-events: auto; cursor: pointer;
+  background: none; border: none; padding: 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-weight: 500;
+  font-size: 32px; letter-spacing: .5px; line-height: .9;
+  color: #ece4d6;
+}
+
+.ca-nav-btn {
+  pointer-events: auto; cursor: pointer;
+  background: none; border: none; padding: 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(236, 228, 214, .62);
+  transition: color .3s ease;
+}
+.ca-nav-btn:hover { color: #ece4d6; }
+
+/* ── overlay animations ───────────────────────────────────────────────────── */
+@keyframes caFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes caRise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
